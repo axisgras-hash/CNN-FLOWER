@@ -23,8 +23,9 @@ MODEL_PATH = "flower_cnn.h5"
 CLASSES_PATH = "classes.pkl"
 
 # 🔗 GOOGLE DRIVE (DIRECT DOWNLOAD LINKS)
-MODEL_URL = "https://drive.google.com/uc?id=1sn7Fv22Kq_XppVdbE0MWz1uxlY89wFNj"
-CLASSES_URL = "https://drive.google.com/uc?id=1-juikjclAckEoUJfyDq9QTAKecPK4EXK"
+MODEL_URL = "https://drive.google.com/uc?id=1YVmC1FYdRYcc_JsBhmOrRus3c7ACLlyu"
+
+CLASSES_URL = "https://drive.google.com/uc?id=1-cXx7zF62mZgBQppxh8jHbGtxaquD66X"
 
 # --------------------------------------------------
 # DOWNLOAD FILES IF NOT PRESENT
