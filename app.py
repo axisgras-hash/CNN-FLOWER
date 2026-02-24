@@ -29,7 +29,6 @@ CLASSES_PATH = "classes.pkl"
 # 🔗 GOOGLE DRIVE DIRECT DOWNLOAD LINKS (SAME AS YOURS)
 MODEL_URL = "https://drive.google.com/uc?id=1YVmC1FYdRYcc_JsBhmOrRus3c7ACLlyu"
 CLASSES_URL = "https://drive.google.com/uc?id=1-cXx7zF62mZgBQppxh8jHbGtxaquD66X"
-
 # --------------------------------------------------
 # SIDEBAR
 # --------------------------------------------------
