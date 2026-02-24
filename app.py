@@ -70,7 +70,7 @@ def load_assets():
     return model, classes
 
 model, classes = load_assets()
-
+st.write(classes)
 # --------------------------------------------------
 # IMAGE UPLOAD
 # --------------------------------------------------
