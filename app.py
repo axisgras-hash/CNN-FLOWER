@@ -14,11 +14,8 @@ st.set_page_config(
     layout="centered"
 )
 
-# --------------------------------------------------
-# TITLE
-# --------------------------------------------------
 st.title("🌸 Flower Classification using CNN")
-st.caption("Simple Convolutional Neural Network | Image Classification Demo")
+st.caption("Simple CNN-based Image Classification Demo")
 
 # --------------------------------------------------
 # CONFIG
@@ -29,7 +26,7 @@ CONF_THRESHOLD = 0.60
 MODEL_PATH = "flower_cnn.h5"
 CLASSES_PATH = "classes.pkl"
 
-# 🔗 GOOGLE DRIVE (DIRECT DOWNLOAD LINKS – SAME AS YOURS)
+# 🔗 GOOGLE DRIVE DIRECT DOWNLOAD LINKS (SAME AS YOURS)
 MODEL_URL = "https://drive.google.com/uc?id=1YVmC1FYdRYcc_JsBhmOrRus3c7ACLlyu"
 CLASSES_URL = "https://drive.google.com/uc?id=1-cXx7zF62mZgBQppxh8jHbGtxaquD66X"
 
@@ -48,15 +45,7 @@ st.sidebar.markdown("""
 - Sunflowers  
 - Tulips  
 
-⚠️ Images outside these classes may give approximate results.
-""")
-
-st.sidebar.markdown("---")
-st.sidebar.markdown("""
-**Use Case**
-- CNN fundamentals  
-- Image preprocessing  
-- Confidence interpretation  
+⚠️ Images very different from training data may give unreliable confidence.
 """)
 
 # --------------------------------------------------
@@ -86,7 +75,7 @@ model, classes = load_assets()
 # IMAGE UPLOAD
 # --------------------------------------------------
 uploaded_file = st.file_uploader(
-    "📤 Upload a flower image (JPG / PNG)",
+    "📤 Upload Flower Image (JPG / PNG)",
     type=["jpg", "jpeg", "png"]
 )
 
@@ -95,23 +84,33 @@ uploaded_file = st.file_uploader(
 # --------------------------------------------------
 if uploaded_file is not None:
     image = Image.open(uploaded_file).convert("RGB")
-
     st.image(image, caption="Uploaded Image", width=320)
 
     # -------- Preprocessing --------
     img = image.resize((IMG_SIZE, IMG_SIZE))
-    img_array = np.array(img) / 255.0
+    img_array = np.array(img, dtype=np.float32) / 255.0
     img_array = np.expand_dims(img_array, axis=0)
 
     # -------- Prediction --------
     with st.spinner("Predicting..."):
         predictions = model.predict(img_array)[0]
 
-    class_index = np.argmax(predictions)
-    confidence = predictions[class_index]
+    # -------- SAFETY CHECKS (IMPORTANT) --------
+    if np.any(np.isnan(predictions)) or np.sum(predictions) == 0:
+        st.error(
+            "⚠️ Model produced invalid confidence values.\n\n"
+            "This image may be very different from training data."
+        )
+        st.stop()
+
+    # Normalize (extra safety)
+    predictions = predictions / np.sum(predictions)
+
+    class_index = int(np.argmax(predictions))
+    confidence = float(predictions[class_index])
 
     # --------------------------------------------------
-    # RESULTS
+    # RESULT
     # --------------------------------------------------
     st.subheader("✅ Prediction Result")
 
@@ -125,18 +124,20 @@ if uploaded_file is not None:
         st.success(f"🌼 **{classes[class_index]}**")
         st.info(f"Confidence: **{confidence*100:.2f}%**")
 
-    # Confidence bar
-    st.progress(float(confidence))
+    # Progress bar (SAFE)
+    if 0 <= confidence <= 1:
+        st.progress(confidence)
 
     # --------------------------------------------------
-    # TOP-3 PREDICTIONS (DYNAMIC PART)
+    # TOP-3 PREDICTIONS
     # --------------------------------------------------
     st.subheader("📊 Top-3 Predictions")
 
     top_indices = np.argsort(predictions)[::-1][:3]
-
     for i in top_indices:
         st.write(f"**{classes[i]}** — {predictions[i]*100:.2f}%")
+
+    st.caption("⚠️ Confidence may be unreliable for complex or multi-flower images.")
 
 # --------------------------------------------------
 # FOOTER
