@@ -85,7 +85,7 @@ st.write("Upload a flower image and click **Predict** to see the result.")
 # =====================================================
 uploaded_file = st.file_uploader(
     "Upload Image",
-    type=["jpg", "jpeg", "png"]
+    type=["jpg", "jpeg", "png","webp"]
 )
 
 # =====================================================
