@@ -120,7 +120,7 @@ st.markdown("---")
 # =====================================================
 uploaded_file = st.file_uploader(
     "📤 Upload a flower image",
-    type=["jpg", "jpeg", "png"]
+    type=["jpg", "jpeg", "png","webp"]
 )
 
 # =====================================================
